@@ -103,15 +103,15 @@ function dedicado_TerminateAccount($params){
 
 function dedicado_ClientArea($params) {  
 	if (!empty($params['customfields']['librenmsid'])) {
-	$imagem=file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
-	$base64 = base64_encode($imagem);
+		$imagem=file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
+		$base64 = base64_encode($imagem);
 
-	$criarHTML = '<center>
-	<h3>Monitoramento de Rede (últimas 24 horas)</h3>
-	<img src="data:image/png;base64,'.$base64.'" alt="" />
-	</center>';
-	
-	return $criarHTML;	
-}
+		$criarHTML = '<center>
+		<h3>Monitoramento de rede (últimas 24 horas)</h3>
+		<img src="data:image/png;base64,'.$base64.'" alt="" />
+		</center>';
+		
+		return $criarHTML;	
+	}
 }
 ?>
