@@ -114,4 +114,22 @@ function dedicado_ClientArea($params) {
 		return $criarHTML;	
 	}
 }
+
+function dedicado_AdminServicesTabFields($params) {  
+	if (!empty($params['customfields']['librenmsid'])) {
+		$imagem=file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
+		$base64 = base64_encode($imagem);
+
+		$criarHTML = '<center>
+		<h3>Monitoramento de rede (últimas 24 horas)</h3>
+		<img src="data:image/png;base64,'.$base64.'" alt="" />
+		</center>';
+		
+		$fieldsarray = array(
+		 'Graph' => '<div style="width:100%" id="tab1"></div>'.$criarHTML,
+		);
+		
+		return $fieldsarray;
+	}
+}
 ?>
