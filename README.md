@@ -6,7 +6,7 @@ Installing:
 2. Add the following lines to librenms's config.php where 192.168.0.1 is your whmcs's IP:
 ```php
 $config['allow_unauth_graphs_cidr'] = array('192.168.0.1/32');
-$config['allow_unauth_graphs'] = true;'''
+$config['allow_unauth_graphs'] = true;
 ```
 3. Configure the module with your librenms hostname inside your product.
 4. Add a custom field named "librenmsid" to your product.
