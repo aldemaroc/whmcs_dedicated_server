@@ -7,7 +7,7 @@ if(!defined('WHMCS')){
 
 function dedicado_MetaData(){
     return array(
-        'DisplayName' => 'Servidor Dedicado Hostzone',
+        'DisplayName' => 'Servidor Dedicado',
         'APIVersion' => '1.1',
         'RequiresServer' => false
     );
@@ -28,9 +28,10 @@ function dedicado_CreateTodoItem($params){
 	$pdo = Capsule::connection()->getPdo();
 	$date = $params['date'];
 	$title = $params['title'];
+	$description = $params['description'];
 	$status = $params['status'];
 	$duedate = $params['duedate'];
-	$sql = $pdo->query('INSERT INTO tbltodolist (date, title, status, duedate) VALUES ("'.$date.'", "'.$title.'", "'.$status.'", "'.$duedate.'")');
+	$sql = $pdo->query('INSERT INTO tbltodolist (date, title, description, status, duedate) VALUES ("'.$date.'", "'.$title.'", "'.$description.'", "'.$status.'", "'.$duedate.'")');
 	if($sql){
 		$response = [
 			'success' => true
@@ -49,6 +50,7 @@ function dedicado_CreateAccount($params){
 	dedicado_CreateTodoItem([
 		'date' => date('Y-m-d'),
 		'title' => 'Instalação de Servidor Dedicado - Client ID: '.$params['clientsdetails']['userid'].' - Service ID: '.$params['serviceid'],
+		'description' => '',
 		'status' => 'Pendente',
 		'duedate' => date('Y-m-d')
 	]);
@@ -79,6 +81,7 @@ function dedicado_SuspendAccount($params){
 	dedicado_CreateTodoItem([
 		'date' => date('Y-m-d'),
 		'title' => 'Suspensão de Servidor Dedicado - Client ID: '.$params['clientsdetails']['userid'].' - Service ID: '.$params['serviceid'],
+		'description' => '',
 		'status' => 'Pendente',
 		'duedate' => date('Y-m-d')
 	]);
@@ -109,6 +112,7 @@ function dedicado_TerminateAccount($params){
 	dedicado_CreateTodoItem([
 		'date' => date('Y-m-d'),
 		'title' => 'Cancelamento de Servidor Dedicado - Client ID: '.$params['clientsdetails']['userid'].' - Service ID: '.$params['serviceid'],
+		'description' => '',
 		'status' => 'Pendente',
 		'duedate' => date('Y-m-d')
 	]);
