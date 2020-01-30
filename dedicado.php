@@ -7,7 +7,7 @@ if(!defined('WHMCS')){
 
 function dedicado_MetaData(){
     return array(
-        'DisplayName' => 'Servidor Dedicado',
+        'DisplayName' => 'Servidor Dedicado Manual',
         'APIVersion' => '1.1',
         'RequiresServer' => false
     );
@@ -73,7 +73,7 @@ function dedicado_CreateAccount($params){
 	);
 	localAPI($command, $postData, $adminUsername);
 	// Return status
-	return 'success';
+	return 'Criação manual';
 }
 
 function dedicado_SuspendAccount($params){
@@ -104,7 +104,7 @@ function dedicado_SuspendAccount($params){
 	);
 	localAPI($command, $postData, $adminUsername);
 	// Return status
-	return 'success';
+	return 'Suspensão manual';
 }
 
 function dedicado_TerminateAccount($params){
@@ -135,38 +135,108 @@ function dedicado_TerminateAccount($params){
 	);
 	localAPI($command, $postData, $adminUsername);
 	// Return status
-	return 'success';
+	return 'Finalização manual';
 }
 
-function dedicado_ClientArea($params){ 
+
+function dedicado_HTML($params){
+	
+	if(!empty($params['customfields']['ipmiip'])){
+		$url = 'https://'.$params['customfields']['ipmiuser'].':'.$params['customfields']['ipmipass'].'testeapi@'.$params['customfields']['ipmiip'].'/redfish/v1/Systems/1/';
+		$saida = file_get_contents($url, false, stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false,), 'http' => array('timeout' => 2,))));
+		$var = json_decode($saida);
+	}
+	if($var->PowerState=="On"){
+		$estado = '<b style="color:#2ab551"><i class="fas fa-power-off"></i> Ligado</b>';
+		$botao = 'Desligar';
+	}elseif($var->PowerState=="Off"){
+		$estado = '<b style="color:#fa0000"><i class="fas fa-power-off"></i> Desligado</b>';
+		$botao = 'Ligar';
+	}else{
+		$estado = '<b style="color:#737373"><i class="fas fa-question-circle"></i> Desconhecido</b>';
+		$botao = 'Desconhecido';
+	}
+		
 	if(!empty($params['customfields']['librenmsid'])){
 		$imagem = file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
 		$base64 = base64_encode($imagem);
 
-		$criarHTML = '<center>
-		<h3>Monitoramento de rede (últimas 24 horas)</h3>
-		<img src="data:image/png;base64,'.$base64.'" alt="" />
-		</center>';
+		$criarHTML = '
+		<center>
+		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
+			<h3 style="margin:15px 10px 10px 10px;">Controle de energia</h3>
+			<p style="margin:5px 10px 10px 10px;">Estado atual: '.$estado.'</p>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="liga()"><i class="fas fa-power-off"></i> Ligar</button>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="desliga()"><i class="fas fa-power-off"></i> Desligar</button>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="reinicia()"><i class="fas fa-sync-alt"></i> Reiniciar</button>
+		</div>
+		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
+		<h3 style="margin:15px 10px 10px 10px;">Monitoramento de rede (últimas 24 horas)</h3>
+		<img style="max-width: 100%;margin:5px 5px 15px 0;" src="data:image/png;base64,'.$base64.'" alt="" />
+		</div>
+		</center>
+		<script>
+		function desliga(){
+			var alertConfirm = confirm("Você tem certeza que deseja desligar o servidor?\nEste é um desligamento forçado.");
+			if(alertConfirm){
+				window.location = location.protocol + "//" + location.host + location.pathname + "?action=productdetails&id='.$params['serviceid'].'&modop=custom&a=stop";
+			}
+		}
+		
+		function reinicia(){
+			var alertConfirm2 = confirm("Você tem certeza que deseja reiniciar o servidor?\nEste é um desligamento forçado.");
+			if(alertConfirm2){
+				window.location = location.protocol + "//" + location.host + location.pathname + "?action=productdetails&id='.$params['serviceid'].'&modop=custom&a=reboot";
+			}
+		}
+
+		function liga(){
+			var alertConfirm3 = confirm("Você tem certeza que deseja ligar o servidor?");
+			if(alertConfirm3){
+				window.location = location.protocol + "//" + location.host + location.pathname + "?action=productdetails&id='.$params['serviceid'].'&modop=custom&a=start";
+			}
+		}
+		</script>
+		';
 		
 		return $criarHTML;	
 	}
 }
 
-function dedicado_AdminServicesTabFields($params){ 
-	if(!empty($params['customfields']['librenmsid'])){
-		$imagem = file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
-		$base64 = base64_encode($imagem);
+function dedicado_ClientArea($params){ 
+	
+		return dedicado_HTML($params);
+}
 
-		$criarHTML = '<center>
-		<h3>Monitoramento de rede (últimas 24 horas)</h3>
-		<img src="data:image/png;base64,'.$base64.'" alt="" />
-		</center>';
-		
+function dedicado_AdminServicesTabFields($params){ 
+
 		$fieldsarray = array(
-		 'Graph' => '<div style="width:100%" id="tab1"></div>'.$criarHTML,
+		 'Graph' => '<div style="width:100%" id="tab1"></div>'.dedicado_HTML($params),
 		);
 		
 		return $fieldsarray;
-	}
+}
+function dedicado_AdminCustomButtonArray(){
+	return array(
+		"Ligar" => "start",
+		"Desligar" => "stop",
+		"Reiniciar"=> "reboot"
+	);
+}
+function dedicado_ClientAreaCustomButtonArray(){
+	return array(
+		"Ligar" => "start",
+		"Desligar" => "stop",
+		"Reiniciar"=> "reboot"
+	);
+}
+function dedicado_start(){
+	return 'Esta função está desativada. Contate o suporte para habilita-la.';
+}
+function dedicado_stop(){
+	return 'Esta função está desativada. Contate o suporte para habilita-la.';
+}
+function dedicado_reboot(){
+	return 'Esta função está desativada. Contate o suporte para habilita-la.';
 }
 ?>
