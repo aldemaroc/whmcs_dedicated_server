@@ -142,7 +142,7 @@ function dedicado_TerminateAccount($params){
 function dedicado_HTML($params){
 	
 	if(!empty($params['customfields']['ipmiip'])){
-		$url = 'https://'.$params['customfields']['ipmiuser'].':'.$params['customfields']['ipmipass'].'testeapi@'.$params['customfields']['ipmiip'].'/redfish/v1/Systems/1/';
+		$url = 'https://'.$params['customfields']['ipmiuser'].':'.$params['customfields']['ipmipass'].'@'.$params['customfields']['ipmiip'].'/redfish/v1/Systems/1/';
 		$saida = file_get_contents($url, false, stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false,), 'http' => array('timeout' => 2,))));
 		$var = json_decode($saida);
 	}
@@ -198,9 +198,8 @@ function dedicado_HTML($params){
 		}
 		</script>
 		';
-		
-		return $criarHTML;	
 	}
+	return $criarHTML;	
 }
 
 function dedicado_ClientArea($params){ 
