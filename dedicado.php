@@ -166,9 +166,9 @@ function dedicado_HTML($params){
 		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
 			<h3 style="margin:15px 10px 10px 10px;">Controle de energia</h3>
 			<p style="margin:5px 10px 10px 10px;">Estado atual: '.$estado.'</p>
-			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="liga()"><i class="fas fa-power-off"></i> Ligar</button>
-			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="desliga()"><i class="fas fa-power-off"></i> Desligar</button>
-			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0;" onclick="reinicia()"><i class="fas fa-sync-alt"></i> Reiniciar</button>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="liga()"><i class="fas fa-play" style="></i> Ligar</button>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="desliga()"><i class="fas fa-stop"></i> Desligar</button>
+			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="reinicia()"><i class="fas fa-sync-alt"></i> Reiniciar</button>
 		</div>
 		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
 		<h3 style="margin:15px 10px 10px 10px;">Monitoramento de rede (últimas 24 horas)</h3>
