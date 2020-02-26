@@ -158,33 +158,33 @@ function dedicado_HTML($params){
 	}
 		
 	if(!empty($params['customfields']['librenmsid'])){
-		$imagem = file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits');
+		$imagem = file_get_contents('http://'.$params["configoption1"].'/graph.php?height=250&width=600&id='.$params['customfields']['librenmsid'].'&type=port_bits&inverse=1');
 		$base64 = base64_encode($imagem);
 
 		$criarHTML = '
 		<center>
-		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
+		<div style="background-color: #fdfdfd;border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
 			<h3 style="margin:15px 10px 10px 10px;">Controle de energia</h3>
 			<p style="margin:5px 10px 10px 10px;">Estado atual: '.$estado.'</p>
 			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="liga()"><i class="fas fa-play"></i> Ligar</button>
 			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="desliga()"><i class="fas fa-stop"></i> Desligar</button>
 			<button style="color: #3b3b3b;border-style: solid; border-width: 1px; border-color: #c9c9c9; border-radius: 3px; line-height: 35px;margin:5px 5px 15px 0; word-spacing: 3px;" onclick="reinicia()"><i class="fas fa-sync-alt"></i> Reiniciar</button>
 		</div>
-		<div style="border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
+		<div style="background-color: #fdfdfd	;border-style: solid; border-width: 1px; border-color: #d9d9d9; border-radius: 5px;margin:5px 0 10px 0;">
 		<h3 style="margin:15px 10px 10px 10px;">Monitoramento de rede (últimas 24 horas)</h3>
 		<img style="max-width: 100%;margin:5px 5px 15px 0;" src="data:image/png;base64,'.$base64.'" alt="" />
 		</div>
 		</center>
 		<script>
 		function desliga(){
-			var alertConfirm = confirm("Você tem certeza que deseja desligar o servidor?\nEste é um desligamento forçado.");
+			var alertConfirm = confirm("Você tem certeza que deseja desligar o servidor?\nEste é um desligamento forçado!");
 			if(alertConfirm){
 				window.location = location.protocol + "//" + location.host + location.pathname + "?action=productdetails&id='.$params['serviceid'].'&modop=custom&a=stop";
 			}
 		}
 		
 		function reinicia(){
-			var alertConfirm2 = confirm("Você tem certeza que deseja reiniciar o servidor?\nEste é um desligamento forçado.");
+			var alertConfirm2 = confirm("Você tem certeza que deseja reiniciar o servidor?\nEsta é uma reinicialização forçada!");
 			if(alertConfirm2){
 				window.location = location.protocol + "//" + location.host + location.pathname + "?action=productdetails&id='.$params['serviceid'].'&modop=custom&a=reboot";
 			}
